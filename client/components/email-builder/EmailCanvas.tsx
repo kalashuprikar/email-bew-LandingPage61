@@ -122,7 +122,12 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
             "bg-white border border-t-0 border-gray-200 rounded-b-lg shadow-sm min-h-96 transition-all",
             isOver && "ring-2 ring-valasys-orange bg-orange-50",
           )}
-          onClick={() => setSelectedInlineGroup(null)}
+          onClick={(e) => {
+            // Only deselect inline group if clicking on empty canvas area
+            if (e.target === e.currentTarget) {
+              setSelectedInlineGroup(null);
+            }
+          }}
         >
           {template.blocks.length === 0 ? (
             <div className="text-center py-16 text-gray-400">
