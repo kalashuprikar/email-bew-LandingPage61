@@ -144,7 +144,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
               </p>
             </div>
           ) : (
-            <div className="space-y-0">
+            <div className="w-full flex flex-col">
               {template.blocks.map((block, index) => {
                 const isInlineDisplay = (block as any).displayMode === "inline";
                 const nextBlock = template.blocks[index + 1];
@@ -187,7 +187,8 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                   return (
                     <div
                       key={groupId}
-                      className="relative w-full block"
+                      className="relative w-full block mb-0"
+                      style={{ display: "block", width: "100%" }}
                       onMouseEnter={() => setHoveredInlineGroup(groupId)}
                       onMouseLeave={() => setHoveredInlineGroup(null)}
                       onClick={(e) => {
