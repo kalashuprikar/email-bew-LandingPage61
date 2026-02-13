@@ -15,6 +15,7 @@ interface FooterWithSocialBlockComponentProps {
   onDuplicate?: (block: FooterWithSocialBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
   blockIndex?: number;
+  onDuplicateSection?: (sectionType: string) => void;
 }
 
 export const FooterWithSocialBlockComponent: React.FC<
@@ -126,7 +127,7 @@ export const FooterWithSocialBlockComponent: React.FC<
             onMouseLeave={() => setHoveredSection(null)}
             className={`py-4 px-2 cursor-pointer rounded transition-all relative ${
               selectedElement === "social"
-                ? "ring-2 ring-valasys-orange bg-orange-50"
+                ? "border-2 border-valasys-orange"
                 : hoveredSection === "social"
                   ? "border-2 border-dashed border-valasys-orange"
                   : ""
@@ -219,7 +220,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "enterpriseName"
-                ? "ring-2 ring-valasys-orange bg-orange-50"
+                ? "border-2 border-valasys-orange"
                 : hoveredSection === "enterpriseName"
                   ? "border-2 border-dashed border-valasys-orange"
                   : ""
@@ -239,7 +240,7 @@ export const FooterWithSocialBlockComponent: React.FC<
                   handleFieldChange("enterpriseName", "content", e.target.value)
                 }
                 autoFocus
-                className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
+                className="w-full rounded px-2 py-1 text-center outline-none"
                 style={{
                   fontSize: `${block.enterpriseName.fontSize}px`,
                   fontWeight: block.enterpriseName.fontWeight,
@@ -287,7 +288,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "address"
-                ? "ring-2 ring-valasys-orange bg-orange-50"
+                ? "border-2 border-valasys-orange"
                 : hoveredSection === "address"
                   ? "border-2 border-dashed border-valasys-orange"
                   : ""
@@ -306,7 +307,7 @@ export const FooterWithSocialBlockComponent: React.FC<
                   handleFieldChange("address", "content", e.target.value)
                 }
                 autoFocus
-                className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
+                className="w-full rounded px-2 py-1 text-center outline-none"
                 style={{
                   fontSize: `${block.address.fontSize}px`,
                   fontWeight: block.address.fontWeight,
@@ -356,7 +357,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "subscriptionText"
-                ? "ring-2 ring-valasys-orange bg-orange-50"
+                ? "border-2 border-valasys-orange"
                 : hoveredSection === "subscriptionText"
                   ? "border-2 border-dashed border-valasys-orange"
                   : ""
@@ -375,7 +376,7 @@ export const FooterWithSocialBlockComponent: React.FC<
                   handleFieldChange("subscriptionText", "content", e.target.value)
                 }
                 autoFocus
-                className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
+                className="w-full rounded px-2 py-1 text-center outline-none"
                 style={{
                   fontSize: `${block.subscriptionText.fontSize}px`,
                   fontWeight: block.subscriptionText.fontWeight,
@@ -424,7 +425,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "unsubscribeLink"
-                ? "ring-2 ring-valasys-orange bg-orange-50"
+                ? "border-2 border-valasys-orange"
                 : hoveredSection === "unsubscribeLink"
                   ? "border-2 border-dashed border-valasys-orange"
                   : ""
@@ -445,7 +446,7 @@ export const FooterWithSocialBlockComponent: React.FC<
                     handleFieldChange("unsubscribeLink", "text", e.target.value)
                   }
                   placeholder="Link text"
-                  className="w-full border border-valasys-orange rounded px-2 py-1 text-sm"
+                  className="w-full rounded px-2 py-1 text-sm outline-none"
                 />
                 <input
                   type="url"
@@ -454,7 +455,7 @@ export const FooterWithSocialBlockComponent: React.FC<
                     handleFieldChange("unsubscribeLink", "url", e.target.value)
                   }
                   placeholder="https://"
-                  className="w-full border border-valasys-orange rounded px-2 py-1 text-sm"
+                  className="w-full rounded px-2 py-1 text-sm outline-none"
                 />
               </div>
             ) : (
