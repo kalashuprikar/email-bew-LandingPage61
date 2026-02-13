@@ -18,11 +18,14 @@ interface TwoColumnCardBlockComponentProps {
   block: TwoColumnCardBlock;
   isSelected: boolean;
   onUpdate: (block: TwoColumnCardBlock) => void;
+  onDuplicate?: (block: TwoColumnCardBlock, position: number) => void;
+  onDelete?: (blockId: string) => void;
+  blockIndex?: number;
 }
 
 export const TwoColumnCardBlockComponent: React.FC<
   TwoColumnCardBlockComponentProps
-> = ({ block, isSelected, onUpdate }) => {
+> = ({ block, isSelected, onUpdate, onDuplicate, onDelete, blockIndex = 0 }) => {
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
   const [hoveredFieldId, setHoveredFieldId] = useState<string | null>(null);
   const [focusedFieldId, setFocusedFieldId] = useState<string | null>(null);
@@ -440,12 +443,12 @@ export const TwoColumnCardBlockComponent: React.FC<
           return (
             <div
               key={card.id}
-              className="flex-1 rounded-lg overflow-hidden flex flex-col"
+              className="flex-1 rounded-lg overflow-visible flex flex-col"
               style={{
                 backgroundColor: card.backgroundColor,
                 margin: `${card.margin}px`,
                 borderRadius: `${card.borderRadius}px`,
-                height: "400px",
+                minHeight: "400px",
               }}
               onMouseEnter={() => setHoveredCardId(card.id)}
               onMouseLeave={() => setHoveredCardId(null)}
@@ -513,7 +516,7 @@ export const TwoColumnCardBlockComponent: React.FC<
 
               {/* Content Section */}
               <div
-                className="flex-1 overflow-hidden"
+                className="flex-1 overflow-visible flex flex-col"
                 style={{
                   padding: `${Math.max(12, card.padding)}px`,
                   color: card.textColor,
@@ -742,6 +745,36 @@ export const TwoColumnCardBlockComponent: React.FC<
           );
         })}
       </div>
+
+      {/* Block Actions */}
+      {isSelected && (
+        <div className="flex items-center justify-center gap-2 mt-4 py-2">
+          {onDuplicate && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 px-3 hover:bg-gray-100 border border-gray-200"
+              title="Duplicate this card block"
+              onClick={() => onDuplicate(block, blockIndex + 1)}
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              Copy
+            </Button>
+          )}
+          {onDelete && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 px-3 hover:bg-red-50 border border-red-200"
+              title="Delete this card block"
+              onClick={() => onDelete(block.id)}
+            >
+              <Trash2 className="w-4 h-4 mr-2 text-red-600" />
+              Delete
+            </Button>
+          )}
+        </div>
+      )}
 
       {/* Button Editor Dialog */}
       <Dialog
