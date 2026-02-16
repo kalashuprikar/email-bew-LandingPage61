@@ -93,7 +93,7 @@ const DragItem: React.FC<{
   const ref = React.useRef<HTMLDivElement>(null);
 
   const [{ handlerId }, drop] = useDrop({
-    accept: "block",
+    accept: ["block", "panel-block"],
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -102,13 +102,22 @@ const DragItem: React.FC<{
     hover(item: any) {
       if (!ref.current) return;
 
-      const dragIndex = item.index;
-      const hoverIndex = index;
+      // Handle reordering of existing blocks
+      if (item.index !== undefined) {
+        const dragIndex = item.index;
+        const hoverIndex = index;
 
-      if (dragIndex === hoverIndex) return;
+        if (dragIndex === hoverIndex) return;
 
-      moveBlock(dragIndex, hoverIndex);
-      item.index = hoverIndex;
+        moveBlock(dragIndex, hoverIndex);
+        item.index = hoverIndex;
+      }
+    },
+    drop(item: any) {
+      // Handle adding new block from panel
+      if (item.blockData && onAddBlock && item.index === undefined) {
+        onAddBlock(index + 1, item.blockData);
+      }
     },
   });
 
@@ -367,10 +376,52 @@ export const DraggableLandingPagePreview: React.FC<
     );
   };
 
+  // Drop zone at the end of canvas
+  const EndDropZone: React.FC = () => {
+    const ref = React.useRef<HTMLDivElement>(null);
+
+    const [{ isOver }, drop] = useDrop({
+      accept: "panel-block",
+      collect(monitor) {
+        return {
+          isOver: monitor.isOver(),
+        };
+      },
+      drop(item: any) {
+        if (item.blockData && onAddBlock) {
+          onAddBlock(blocks.length, item.blockData);
+        }
+      },
+    });
+
+    drop(ref);
+
+    return (
+      <div
+        ref={ref}
+        className={`transition-all py-8 border-2 border-dashed rounded-lg ${
+          isOver
+            ? "border-valasys-orange bg-orange-50"
+            : "border-gray-300 bg-gray-50"
+        }`}
+      >
+        <div className="text-center">
+          <p className="text-sm text-gray-500">
+            {isOver
+              ? "Drop block here"
+              : "Drag blocks from left panel to add here"}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="w-full bg-white rounded-lg shadow-md overflow-hidden flex flex-col gap-4 p-4">
+        {blocks.length === 0 && <EndDropZone />}
         {blocks.map((block, index) => renderBlock(block, index))}
+        {blocks.length > 0 && <EndDropZone />}
       </div>
     </DndProvider>
   );
