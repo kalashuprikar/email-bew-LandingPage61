@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useDrag, useDrop, DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrag, useDrop } from "react-dnd";
 import { Trash2, Copy, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -417,12 +416,10 @@ export const DraggableLandingPagePreview: React.FC<
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="w-full bg-white rounded-lg shadow-md overflow-hidden flex flex-col gap-4 p-4">
-        {blocks.length === 0 && <EndDropZone />}
-        {blocks.map((block, index) => renderBlock(block, index))}
-        {blocks.length > 0 && <EndDropZone />}
-      </div>
-    </DndProvider>
+    <div className="w-full bg-white rounded-lg shadow-md overflow-hidden flex flex-col gap-4 p-4">
+      {blocks.length === 0 && <EndDropZone />}
+      {blocks.map((block, index) => renderBlock(block, index))}
+      {blocks.length > 0 && <EndDropZone />}
+    </div>
   );
 };
