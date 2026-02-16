@@ -147,23 +147,17 @@ export const LandingPagePreviewMode: React.FC<LandingPagePreviewModeProps> = ({
       {/* Preview Area */}
       <div className="flex-1 overflow-y-auto bg-gray-900 flex items-start justify-center p-4 md:p-8">
         <style>{`
+          .preview-desktop-only {
+            display: block !important;
+          }
+          .preview-mobile-only {
+            display: none !important;
+          }
           [data-preview-device="mobile"] .preview-desktop-only {
             display: none !important;
           }
           [data-preview-device="mobile"] .preview-mobile-only {
-            display: block !important;
-          }
-          [data-preview-device="tablet"] .preview-desktop-only {
-            display: none !important;
-          }
-          [data-preview-device="tablet"] .preview-mobile-only {
-            display: block !important;
-          }
-          [data-preview-device="desktop"] .preview-desktop-only {
-            display: block !important;
-          }
-          [data-preview-device="desktop"] .preview-mobile-only {
-            display: none !important;
+            display: flex !important;
           }
         `}</style>
         <div
