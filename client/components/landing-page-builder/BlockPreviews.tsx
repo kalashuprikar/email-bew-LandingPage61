@@ -1,5 +1,6 @@
 import React from "react";
 import { LandingPageBlock } from "./types";
+import { EditableLink } from "./EditableLink";
 
 interface BlockPreviewProps {
   block: LandingPageBlock;
@@ -12,8 +13,23 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
   block,
   isSelected,
   onSelect,
+  onUpdate,
 }) => {
   const props = block.properties;
+
+  const handleLinkUpdate = (index: number, label: string, href: string) => {
+    const updated = [...(props.navigationLinks || [])];
+    updated[index] = { label, href };
+    onUpdate({ ...props, navigationLinks: updated });
+  };
+
+  const handleLinkDelete = (index: number) => {
+    const updated = (props.navigationLinks || []).filter(
+      (_: any, i: number) => i !== index,
+    );
+    onUpdate({ ...props, navigationLinks: updated });
+  };
+
   return (
     <div
       onClick={onSelect}
@@ -25,7 +41,19 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
         <div className="font-bold text-gray-900">{props.logoText}</div>
         <div className="flex gap-4 text-sm text-gray-600">
           {props.navigationLinks?.map((link: any, i: number) => (
-            <span key={i}>{link.label}</span>
+            <div
+              key={i}
+              onClick={(e) => e.stopPropagation()}
+              className="hover:text-gray-900"
+            >
+              <EditableLink
+                label={link.label}
+                href={link.href}
+                onUpdate={(label, href) => handleLinkUpdate(i, label, href)}
+                onDelete={() => handleLinkDelete(i)}
+                inline={true}
+              />
+            </div>
           ))}
         </div>
         <button className="px-4 py-2 bg-valasys-orange text-white text-sm font-medium rounded hover:bg-orange-600 transition-colors">
@@ -263,8 +291,23 @@ export const FooterBlockPreview: React.FC<BlockPreviewProps> = ({
   block,
   isSelected,
   onSelect,
+  onUpdate,
 }) => {
   const props = block.properties;
+
+  const handleQuickLinkUpdate = (index: number, label: string, href: string) => {
+    const updated = [...(props.quickLinks || [])];
+    updated[index] = { label, href };
+    onUpdate({ ...props, quickLinks: updated });
+  };
+
+  const handleQuickLinkDelete = (index: number) => {
+    const updated = (props.quickLinks || []).filter(
+      (_: any, i: number) => i !== index,
+    );
+    onUpdate({ ...props, quickLinks: updated });
+  };
+
   return (
     <div
       onClick={onSelect}
@@ -286,9 +329,21 @@ export const FooterBlockPreview: React.FC<BlockPreviewProps> = ({
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <div className="space-y-2">
               {props.quickLinks?.map((link: any, i: number) => (
-                <p key={i} className="text-sm opacity-75 hover:opacity-100">
-                  {link.label}
-                </p>
+                <div
+                  key={i}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-sm opacity-75 hover:opacity-100"
+                >
+                  <EditableLink
+                    label={link.label}
+                    href={link.href}
+                    onUpdate={(label, href) =>
+                      handleQuickLinkUpdate(i, label, href)
+                    }
+                    onDelete={() => handleQuickLinkDelete(i)}
+                    inline={true}
+                  />
+                </div>
               ))}
             </div>
           </div>
