@@ -18,6 +18,91 @@ interface LandingPageSettingsPanelProps {
   onLinkSelect?: (index: number | null, type: "navigation" | "quick" | null) => void;
 }
 
+const DimensionSettings: React.FC<{
+  width: string;
+  minHeight: string;
+  onUpdate: (key: string, value: string) => void;
+}> = ({ width, minHeight, onUpdate }) => {
+  const [widthValue, setWidthValue] = useState(String(width || "100%").replace(/[^0-9]/g, ""));
+  const [widthUnit, setWidthUnit] = useState(String(width || "100%").includes("%") ? "%" : "px");
+  const [minHeightValue, setMinHeightValue] = useState(String(minHeight || "0px").replace(/[^0-9]/g, ""));
+
+  useEffect(() => {
+    setWidthValue(String(width || "100%").replace(/[^0-9]/g, ""));
+    setWidthUnit(String(width || "100%").includes("%") ? "%" : "px");
+  }, [width]);
+
+  useEffect(() => {
+    setMinHeightValue(String(minHeight || "0px").replace(/[^0-9]/g, ""));
+  }, [minHeight]);
+
+  const handleWidthChange = (val: string) => {
+    const numeric = val.replace(/[^0-9]/g, "");
+    setWidthValue(numeric);
+    if (numeric !== "") {
+      let num = parseInt(numeric, 10);
+      if (widthUnit === "%" && num > 100) num = 100;
+      onUpdate("width", `${num}${widthUnit}`);
+    }
+  };
+
+  const handleUnitChange = (unit: string) => {
+    setWidthUnit(unit);
+    let num = parseInt(widthValue, 10) || 100;
+    if (unit === "%" && num > 100) num = 100;
+    onUpdate("width", `${num}${unit}`);
+  };
+
+  const handleMinHeightChange = (val: string) => {
+    const numeric = val.replace(/[^0-9]/g, "");
+    setMinHeightValue(numeric);
+    if (numeric !== "") {
+      onUpdate("minHeight", `${numeric}px`);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <Label className="text-sm font-medium text-gray-700">Width</Label>
+        <div className="flex gap-2 mt-1">
+          <Input
+            type="text"
+            value={widthValue}
+            onChange={(e) => handleWidthChange(e.target.value)}
+            placeholder="100"
+            className="flex-1"
+          />
+          <select
+            value={widthUnit}
+            onChange={(e) => handleUnitChange(e.target.value)}
+            className="px-3 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-valasys-orange"
+          >
+            <option value="%">%</option>
+            <option value="px">px</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium text-gray-700">Min Height</Label>
+        <div className="flex gap-2 mt-1">
+          <Input
+            type="text"
+            value={minHeightValue}
+            onChange={(e) => handleMinHeightChange(e.target.value)}
+            placeholder="500"
+            className="flex-1"
+          />
+          <div className="px-3 py-2 border border-input rounded-md bg-gray-50 text-sm flex items-center text-gray-500 min-w-[45px] justify-center">
+            px
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const LandingPageSettingsPanel: React.FC<
   LandingPageSettingsPanelProps
 > = ({
@@ -305,14 +390,11 @@ export const LandingPageSettingsPanel: React.FC<
         </div>
       </div>
 
-      <div>
-        <Label className="text-sm font-medium">Width</Label>
-        <Input
-          value={localProps.width || "100%"}
-          onChange={(e) => updateProperty("width", e.target.value)}
-          placeholder="100% or 1200px"
-        />
-      </div>
+      <DimensionSettings
+        width={localProps.width}
+        minHeight={localProps.minHeight}
+        onUpdate={updateProperty}
+      />
 
       <div>
         <Label className="text-sm font-medium">Logo Text</Label>
@@ -469,85 +551,11 @@ export const LandingPageSettingsPanel: React.FC<
         </div>
       </div>
 
-      <div>
-        <Label className="text-sm font-medium">Width</Label>
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            value={String(localProps.width || "100%").replace(/[^0-9]/g, "")}
-            onChange={(e) => {
-              const unit = String(localProps.width || "100%").includes("%") ? "%" : "px";
-              const inputValue = e.target.value;
-
-              // Only accept numeric input
-              const numericOnly = inputValue.replace(/[^0-9]/g, "");
-
-              if (numericOnly === "") {
-                return; // Don't save empty values
-              }
-
-              const num = parseInt(numericOnly, 10);
-
-              // For percentage: only allow up to 100
-              if (unit === "%") {
-                if (num > 100) {
-                  return;
-                }
-              }
-
-              updateProperty("width", `${num}${unit}`);
-            }}
-            placeholder="100"
-            className="flex-1"
-          />
-          <select
-            value={String(localProps.width || "100%").includes("%") ? "%" : "px"}
-            onChange={(e) => {
-              const currentNum = parseInt(String(localProps.width || "100").replace(/[^0-9]/g, ""), 10) || 100;
-              const unit = e.target.value;
-
-              // When switching TO percentage, cap at 100
-              if (unit === "%") {
-                const cappedNum = Math.min(currentNum, 100);
-                updateProperty("width", `${cappedNum}${unit}`);
-              } else {
-                updateProperty("width", `${currentNum}${unit}`);
-              }
-            }}
-            className="px-3 py-2 border border-input rounded-md bg-background text-sm"
-          >
-            <option value="%">%</option>
-            <option value="px">px</option>
-          </select>
-        </div>
-      </div>
-
-      <div>
-        <Label className="text-sm font-medium">Min Height</Label>
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            value={String(localProps.minHeight || "500px").replace(/[^0-9]/g, "")}
-            onChange={(e) => {
-              const inputValue = e.target.value;
-
-              // Only accept numeric input
-              const numericOnly = inputValue.replace(/[^0-9]/g, "");
-
-              if (numericOnly === "") {
-                return; // Don't save empty values
-              }
-
-              updateProperty("minHeight", `${numericOnly}px`);
-            }}
-            placeholder="500"
-            className="flex-1"
-          />
-          <div className="px-3 py-2 border border-input rounded-md bg-background text-sm flex items-center text-gray-500">
-            px
-          </div>
-        </div>
-      </div>
+      <DimensionSettings
+        width={localProps.width}
+        minHeight={localProps.minHeight}
+        onUpdate={updateProperty}
+      />
 
       <div>
         <Label className="text-sm font-medium">CTA Button Text</Label>
@@ -702,14 +710,11 @@ export const LandingPageSettingsPanel: React.FC<
         </div>
       </div>
 
-      <div>
-        <Label className="text-sm font-medium">Width</Label>
-        <Input
-          value={localProps.width || "100%"}
-          onChange={(e) => updateProperty("width", e.target.value)}
-          placeholder="100% or 1200px"
-        />
-      </div>
+      <DimensionSettings
+        width={localProps.width}
+        minHeight={localProps.minHeight}
+        onUpdate={updateProperty}
+      />
 
       <div>
         <Label className="text-sm font-medium">Columns</Label>
@@ -788,14 +793,11 @@ export const LandingPageSettingsPanel: React.FC<
         </div>
       </div>
 
-      <div>
-        <Label className="text-sm font-medium">Width</Label>
-        <Input
-          value={localProps.width || "100%"}
-          onChange={(e) => updateProperty("width", e.target.value)}
-          placeholder="100% or 1200px"
-        />
-      </div>
+      <DimensionSettings
+        width={localProps.width}
+        minHeight={localProps.minHeight}
+        onUpdate={updateProperty}
+      />
 
       <div>
         <Label className="text-sm font-medium">Text Color</Label>
@@ -912,14 +914,11 @@ export const LandingPageSettingsPanel: React.FC<
         </div>
       </div>
 
-      <div>
-        <Label className="text-sm font-medium">Width</Label>
-        <Input
-          value={localProps.width || "100%"}
-          onChange={(e) => updateProperty("width", e.target.value)}
-          placeholder="100% or 1200px"
-        />
-      </div>
+      <DimensionSettings
+        width={localProps.width}
+        minHeight={localProps.minHeight}
+        onUpdate={updateProperty}
+      />
     </div>
   );
 
@@ -952,14 +951,11 @@ export const LandingPageSettingsPanel: React.FC<
         </div>
       </div>
 
-      <div>
-        <Label className="text-sm font-medium">Width</Label>
-        <Input
-          value={localProps.width || "100%"}
-          onChange={(e) => updateProperty("width", e.target.value)}
-          placeholder="100% or 1200px"
-        />
-      </div>
+      <DimensionSettings
+        width={localProps.width}
+        minHeight={localProps.minHeight}
+        onUpdate={updateProperty}
+      />
     </div>
   );
 
@@ -983,14 +979,11 @@ export const LandingPageSettingsPanel: React.FC<
         </div>
       </div>
 
-      <div>
-        <Label className="text-sm font-medium">Width</Label>
-        <Input
-          value={localProps.width || "100%"}
-          onChange={(e) => updateProperty("width", e.target.value)}
-          placeholder="100% or 1200px"
-        />
-      </div>
+      <DimensionSettings
+        width={localProps.width}
+        minHeight={localProps.minHeight}
+        onUpdate={updateProperty}
+      />
     </div>
   );
 

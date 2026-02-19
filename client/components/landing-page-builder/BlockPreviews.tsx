@@ -51,6 +51,8 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -737,6 +739,8 @@ export const FeaturesBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
@@ -781,6 +785,8 @@ export const TestimonialsBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
@@ -823,6 +829,8 @@ export const AboutBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
@@ -869,6 +877,8 @@ export const ContactFormBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16 max-w-2xl mx-auto">
@@ -1030,6 +1040,8 @@ export const PricingBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
@@ -1095,6 +1107,8 @@ export const FaqBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16 max-w-3xl mx-auto">
@@ -1137,6 +1151,8 @@ export const SignupBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16 max-w-2xl mx-auto text-center">
@@ -1180,6 +1196,8 @@ export const PricingFooterBlockPreview: React.FC<BlockPreviewProps> = ({
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
+        minHeight: props.minHeight || "auto",
+        margin: "0 auto",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-12">
