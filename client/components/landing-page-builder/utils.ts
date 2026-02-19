@@ -47,26 +47,26 @@ export const createFeaturesBlock = (): LandingPageBlock => ({
     features: [
       {
         id: "feature-1",
-        icon: "⚡",
+        icon: "Zap",
         title: "Lightning Fast",
         description:
           "Optimized performance that keeps your projects running smoothly",
       },
       {
         id: "feature-2",
-        icon: "🎨",
+        icon: "Palette",
         title: "Beautiful Design",
         description: "Create stunning visuals with our intuitive design tools",
       },
       {
         id: "feature-3",
-        icon: "🔒",
+        icon: "Lock",
         title: "Secure",
         description: "Enterprise-grade security to protect your data",
       },
       {
         id: "feature-4",
-        icon: "🌐",
+        icon: "Globe",
         title: "Scalable",
         description: "Grows with your business needs",
       },

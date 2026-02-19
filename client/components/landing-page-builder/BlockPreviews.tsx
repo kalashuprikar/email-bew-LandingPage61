@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, X, Copy, Trash2 } from "lucide-react";
+import { Menu, X, Copy, Trash2, Zap, Palette, Lock, Globe } from "lucide-react";
 import { LandingPageBlock } from "./types";
 import { EditableLink } from "./EditableLink";
 import { cn } from "@/lib/utils";
@@ -867,6 +867,25 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
   );
 };
 
+const FeatureIcon = ({ icon }: { icon: string }) => {
+  switch (icon) {
+    case "⚡":
+    case "Zap":
+      return <Zap className="w-10 h-10 md:w-12 md:h-12 text-yellow-500 fill-yellow-400 stroke-black stroke-[1.5px]" />;
+    case "🎨":
+    case "Palette":
+      return <Palette className="w-10 h-10 md:w-12 md:h-12 text-yellow-500 fill-yellow-400 stroke-black stroke-[1.5px]" />;
+    case "🔒":
+    case "Lock":
+      return <Lock className="w-10 h-10 md:w-12 md:h-12 text-yellow-500 fill-yellow-400 stroke-black stroke-[1.5px]" />;
+    case "🌐":
+    case "Globe":
+      return <Globe className="w-10 h-10 md:w-12 md:h-12 text-blue-500 fill-blue-400 stroke-black stroke-[1.5px]" />;
+    default:
+      return <div className="text-3xl md:text-4xl">{icon}</div>;
+  }
+};
+
 export const FeaturesBlockPreview: React.FC<BlockPreviewProps> = ({
   block,
   isSelected,
@@ -961,8 +980,10 @@ export const FeaturesBlockPreview: React.FC<BlockPreviewProps> = ({
                 onUpdate({ ...props, features: newFeatures });
               }}
             >
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl mb-4">{feature.icon}</div>
+              <div className="text-center flex flex-col items-center">
+                <div className="mb-4">
+                  <FeatureIcon icon={feature.icon} />
+                </div>
                 <h3 className="text-sm md:text-lg font-semibold text-gray-900 mb-2">
                   {feature.title}
                 </h3>
