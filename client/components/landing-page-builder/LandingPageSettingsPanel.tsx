@@ -151,32 +151,33 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.headlineWidth || "100%").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
-                          const unit = String(localProps.headlineWidth || "100%").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
-                            updateProperty("headlineWidth", "100%");
+                            updateProperty("headlineWidth", `100${headlineWidthUnit}`);
                             return;
                           }
                           const num = parseInt(numericOnly, 10);
-                          if (unit === "%" && num > 100) {
+                          if (headlineWidthUnit === "%" && num > 100) {
                             return;
                           }
-                          updateProperty("headlineWidth", `${num}${unit}`);
+                          updateProperty("headlineWidth", `${num}${headlineWidthUnit}`);
                         }}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "headlineWidth", String(localProps.headlineWidth || "100%"))}
                         placeholder="100"
                         className="flex-1"
                       />
                       <select
-                        value={String(localProps.headlineWidth || "100%").includes("%") ? "%" : "px"}
+                        value={headlineWidthUnit}
                         onChange={(e) => {
+                          const newUnit = e.target.value as "%" | "px";
                           const currentNum = parseInt(String(localProps.headlineWidth || "100").replace(/[^0-9]/g, ""), 10) || 100;
-                          const unit = e.target.value;
-                          if (unit === "%") {
+                          setHeadlineWidthUnit(newUnit);
+                          if (newUnit === "%") {
                             const cappedNum = Math.min(currentNum, 100);
-                            updateProperty("headlineWidth", `${cappedNum}${unit}`);
+                            updateProperty("headlineWidth", `${cappedNum}${newUnit}`);
                           } else {
-                            updateProperty("headlineWidth", `${currentNum}${unit}`);
+                            updateProperty("headlineWidth", `${currentNum}${newUnit}`);
                           }
                         }}
                         className="px-3 py-2 border border-input rounded-md bg-background text-sm"
@@ -187,7 +188,7 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateProperty("headlineWidth", "100%")}
+                        onClick={() => updateProperty("headlineWidth", "0px")}
                         className="px-3"
                       >
                         Reset
@@ -201,7 +202,6 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.headlineHeight || "auto").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
-                          const unit = String(localProps.headlineHeight || "auto").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
@@ -209,24 +209,26 @@ export const LandingPageSettingsPanel: React.FC<
                             return;
                           }
                           const num = parseInt(numericOnly, 10);
-                          if (unit === "%" && num > 100) {
+                          if (headlineHeightUnit === "%" && num > 100) {
                             return;
                           }
-                          updateProperty("headlineHeight", `${num}${unit}`);
+                          updateProperty("headlineHeight", `${num}${headlineHeightUnit}`);
                         }}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "headlineHeight", String(localProps.headlineHeight || "auto"))}
                         placeholder="auto or number"
                         className="flex-1"
                       />
                       <select
-                        value={String(localProps.headlineHeight || "auto").includes("%") ? "%" : "px"}
+                        value={headlineHeightUnit}
                         onChange={(e) => {
+                          const newUnit = e.target.value as "%" | "px";
                           const currentNum = parseInt(String(localProps.headlineHeight || "100").replace(/[^0-9]/g, ""), 10) || 100;
-                          const unit = e.target.value;
-                          if (unit === "%") {
+                          setHeadlineHeightUnit(newUnit);
+                          if (newUnit === "%") {
                             const cappedNum = Math.min(currentNum, 100);
-                            updateProperty("headlineHeight", `${cappedNum}${unit}`);
+                            updateProperty("headlineHeight", `${cappedNum}${newUnit}`);
                           } else {
-                            updateProperty("headlineHeight", `${currentNum}${unit}`);
+                            updateProperty("headlineHeight", `${currentNum}${newUnit}`);
                           }
                         }}
                         className="px-3 py-2 border border-input rounded-md bg-background text-sm"
@@ -237,7 +239,7 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateProperty("headlineHeight", "auto")}
+                        onClick={() => updateProperty("headlineHeight", "0px")}
                         className="px-3"
                       >
                         Reset
@@ -285,32 +287,33 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.subheadingWidth || "100%").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
-                          const unit = String(localProps.subheadingWidth || "100%").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
-                            updateProperty("subheadingWidth", "100%");
+                            updateProperty("subheadingWidth", `100${subheadingWidthUnit}`);
                             return;
                           }
                           const num = parseInt(numericOnly, 10);
-                          if (unit === "%" && num > 100) {
+                          if (subheadingWidthUnit === "%" && num > 100) {
                             return;
                           }
-                          updateProperty("subheadingWidth", `${num}${unit}`);
+                          updateProperty("subheadingWidth", `${num}${subheadingWidthUnit}`);
                         }}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "subheadingWidth", String(localProps.subheadingWidth || "100%"))}
                         placeholder="100"
                         className="flex-1"
                       />
                       <select
-                        value={String(localProps.subheadingWidth || "100%").includes("%") ? "%" : "px"}
+                        value={subheadingWidthUnit}
                         onChange={(e) => {
+                          const newUnit = e.target.value as "%" | "px";
                           const currentNum = parseInt(String(localProps.subheadingWidth || "100").replace(/[^0-9]/g, ""), 10) || 100;
-                          const unit = e.target.value;
-                          if (unit === "%") {
+                          setSubheadingWidthUnit(newUnit);
+                          if (newUnit === "%") {
                             const cappedNum = Math.min(currentNum, 100);
-                            updateProperty("subheadingWidth", `${cappedNum}${unit}`);
+                            updateProperty("subheadingWidth", `${cappedNum}${newUnit}`);
                           } else {
-                            updateProperty("subheadingWidth", `${currentNum}${unit}`);
+                            updateProperty("subheadingWidth", `${currentNum}${newUnit}`);
                           }
                         }}
                         className="px-3 py-2 border border-input rounded-md bg-background text-sm"
@@ -321,7 +324,7 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateProperty("subheadingWidth", "100%")}
+                        onClick={() => updateProperty("subheadingWidth", "0px")}
                         className="px-3"
                       >
                         Reset
@@ -335,7 +338,6 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.subheadingHeight || "auto").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
-                          const unit = String(localProps.subheadingHeight || "auto").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
@@ -343,24 +345,26 @@ export const LandingPageSettingsPanel: React.FC<
                             return;
                           }
                           const num = parseInt(numericOnly, 10);
-                          if (unit === "%" && num > 100) {
+                          if (subheadingHeightUnit === "%" && num > 100) {
                             return;
                           }
-                          updateProperty("subheadingHeight", `${num}${unit}`);
+                          updateProperty("subheadingHeight", `${num}${subheadingHeightUnit}`);
                         }}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "subheadingHeight", String(localProps.subheadingHeight || "auto"))}
                         placeholder="auto or number"
                         className="flex-1"
                       />
                       <select
-                        value={String(localProps.subheadingHeight || "auto").includes("%") ? "%" : "px"}
+                        value={subheadingHeightUnit}
                         onChange={(e) => {
+                          const newUnit = e.target.value as "%" | "px";
                           const currentNum = parseInt(String(localProps.subheadingHeight || "100").replace(/[^0-9]/g, ""), 10) || 100;
-                          const unit = e.target.value;
-                          if (unit === "%") {
+                          setSubheadingHeightUnit(newUnit);
+                          if (newUnit === "%") {
                             const cappedNum = Math.min(currentNum, 100);
-                            updateProperty("subheadingHeight", `${cappedNum}${unit}`);
+                            updateProperty("subheadingHeight", `${cappedNum}${newUnit}`);
                           } else {
-                            updateProperty("subheadingHeight", `${currentNum}${unit}`);
+                            updateProperty("subheadingHeight", `${currentNum}${newUnit}`);
                           }
                         }}
                         className="px-3 py-2 border border-input rounded-md bg-background text-sm"
@@ -371,7 +375,7 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateProperty("subheadingHeight", "auto")}
+                        onClick={() => updateProperty("subheadingHeight", "0px")}
                         className="px-3"
                       >
                         Reset
@@ -442,6 +446,7 @@ export const LandingPageSettingsPanel: React.FC<
                           }
                           updateProperty("ctaButtonWidth", `${numericOnly}px`);
                         }}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "ctaButtonWidth", String(localProps.ctaButtonWidth || "auto"))}
                         placeholder="auto or number"
                         className="flex-1"
                       />
@@ -451,7 +456,7 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateProperty("ctaButtonWidth", "auto")}
+                        onClick={() => updateProperty("ctaButtonWidth", "0px")}
                         className="px-3"
                       >
                         Reset
@@ -465,7 +470,6 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={String(localProps.ctaButtonHeight || "auto").replace(/[^0-9]/g, "")}
                         onChange={(e) => {
-                          const unit = String(localProps.ctaButtonHeight || "auto").includes("%") ? "%" : "px";
                           const inputValue = e.target.value;
                           const numericOnly = inputValue.replace(/[^0-9]/g, "");
                           if (numericOnly === "") {
@@ -473,24 +477,26 @@ export const LandingPageSettingsPanel: React.FC<
                             return;
                           }
                           const num = parseInt(numericOnly, 10);
-                          if (unit === "%" && num > 100) {
+                          if (buttonHeightUnit === "%" && num > 100) {
                             return;
                           }
-                          updateProperty("ctaButtonHeight", `${num}${unit}`);
+                          updateProperty("ctaButtonHeight", `${num}${buttonHeightUnit}`);
                         }}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "ctaButtonHeight", String(localProps.ctaButtonHeight || "auto"))}
                         placeholder="auto or number"
                         className="flex-1"
                       />
                       <select
-                        value={String(localProps.ctaButtonHeight || "auto").includes("%") ? "%" : "px"}
+                        value={buttonHeightUnit}
                         onChange={(e) => {
+                          const newUnit = e.target.value as "%" | "px";
                           const currentNum = parseInt(String(localProps.ctaButtonHeight || "100").replace(/[^0-9]/g, ""), 10) || 100;
-                          const unit = e.target.value;
-                          if (unit === "%") {
+                          setButtonHeightUnit(newUnit);
+                          if (newUnit === "%") {
                             const cappedNum = Math.min(currentNum, 100);
-                            updateProperty("ctaButtonHeight", `${cappedNum}${unit}`);
+                            updateProperty("ctaButtonHeight", `${cappedNum}${newUnit}`);
                           } else {
-                            updateProperty("ctaButtonHeight", `${currentNum}${unit}`);
+                            updateProperty("ctaButtonHeight", `${currentNum}${newUnit}`);
                           }
                         }}
                         className="px-3 py-2 border border-input rounded-md bg-background text-sm"
@@ -501,7 +507,7 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateProperty("ctaButtonHeight", "auto")}
+                        onClick={() => updateProperty("ctaButtonHeight", "0px")}
                         className="px-3"
                       >
                         Reset
@@ -886,6 +892,7 @@ export const LandingPageSettingsPanel: React.FC<
 
               updateProperty("minHeight", `${numericOnly}px`);
             }}
+            onKeyDown={(e) => handleSizeKeyDown(e, "minHeight", String(localProps.minHeight || "500px"))}
             placeholder="500"
             className="flex-1"
           />

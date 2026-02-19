@@ -301,7 +301,10 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
               page={page}
               selectedBlockId={selectedBlockId}
               selectedElement={selectedElement}
-              onSelectBlock={setSelectedBlockId}
+              onSelectBlock={(blockId) => {
+                setSelectedBlockId(blockId);
+                setSelectedElement(null);
+              }}
               onElementSelect={setSelectedElement}
               onUpdateBlock={handleUpdateBlock}
               onDeleteBlock={handleDeleteBlock}

@@ -301,16 +301,39 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 Overlay Opacity (0-100)
               </Label>
               <Input
-                type="number"
-                min="0"
-                max="100"
-                value={props.overlayOpacity || 0}
-                onChange={(e) =>
+                type="text"
+                value={String(props.overlayOpacity || 0)}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const numericOnly = inputValue.replace(/[^0-9]/g, "");
+                  if (numericOnly === "") {
+                    onBlockUpdate({
+                      ...block,
+                      properties: { ...props, overlayOpacity: 0 },
+                    });
+                    return;
+                  }
+                  const num = Math.min(parseInt(numericOnly, 10), 100);
                   onBlockUpdate({
                     ...block,
-                    properties: { ...props, overlayOpacity: parseInt(e.target.value) },
-                  })
-                }
+                    properties: { ...props, overlayOpacity: num },
+                  });
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                    e.preventDefault();
+                    const currentValue = props.overlayOpacity || 0;
+                    const step = 5;
+                    const newValue = e.key === "ArrowUp"
+                      ? Math.min(currentValue + step, 100)
+                      : Math.max(currentValue - step, 0);
+                    onBlockUpdate({
+                      ...block,
+                      properties: { ...props, overlayOpacity: newValue },
+                    });
+                  }
+                }}
+                placeholder="0"
                 className="focus:ring-valasys-orange focus:ring-2"
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -330,6 +353,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     properties: { ...props, minHeight: e.target.value },
                   })
                 }
+                onKeyDown={(e) => handleSizeKeyDown(e, "minHeight", props.minHeight || "500px")}
                 className="focus:ring-valasys-orange focus:ring-2"
               />
             </div>
