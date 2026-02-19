@@ -35,6 +35,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
   const [page, setPage] = useState<LandingPage | null>(null);
   const [pageName, setPageName] = useState("");
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [selectedElement, setSelectedElement] = useState<"heading" | "subheading" | "button" | null>(null);
   const [selectedLinkIndex, setSelectedLinkIndex] = useState<number | null>(null);
   const [selectedLinkType, setSelectedLinkType] = useState<"navigation" | "quick" | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -98,6 +99,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     });
 
     setSelectedBlockId(null);
+    setSelectedElement(null);
   };
 
   const handleMoveBlock = (blockId: string, direction: "up" | "down") => {
@@ -298,7 +300,9 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
             <DraggableLandingPagePreview
               page={page}
               selectedBlockId={selectedBlockId}
+              selectedElement={selectedElement}
               onSelectBlock={setSelectedBlockId}
+              onElementSelect={setSelectedElement}
               onUpdateBlock={handleUpdateBlock}
               onDeleteBlock={handleDeleteBlock}
               onMoveBlock={handleMoveBlock}
@@ -309,6 +313,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
                 setSelectedBlockId(blockId);
                 setSelectedLinkIndex(linkIndex);
                 setSelectedLinkType(linkType);
+                setSelectedElement(null);
               }}
             />
           </div>
@@ -320,6 +325,8 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
         <LandingPageSettingsPanel
           block={selectedBlock}
           blockId={selectedBlockId || undefined}
+          selectedElement={selectedElement}
+          onElementSelect={setSelectedElement}
           onBlockUpdate={handleUpdateBlock}
           onBlockDelete={
             selectedBlockId ? () => handleDeleteBlock(selectedBlockId) : undefined

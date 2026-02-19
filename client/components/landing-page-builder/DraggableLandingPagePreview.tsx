@@ -41,7 +41,9 @@ import {
 interface DraggableLandingPagePreviewProps {
   page: LandingPage;
   selectedBlockId: string | null;
+  selectedElement?: "heading" | "subheading" | "button" | null;
   onSelectBlock: (blockId: string | null) => void;
+  onElementSelect?: (element: "heading" | "subheading" | "button" | null) => void;
   onUpdateBlock: (blockId: string, properties: Record<string, any>) => void;
   onDeleteBlock: (blockId: string) => void;
   onMoveBlock: (blockId: string, direction: "up" | "down") => void;
@@ -70,7 +72,9 @@ const DragItem: React.FC<{
   block: LandingPageBlock;
   index: number;
   isSelected: boolean;
+  selectedElement?: "heading" | "subheading" | "button" | null;
   onSelect: () => void;
+  onElementSelect?: (element: "heading" | "subheading" | "button" | null) => void;
   onUpdate: (props: Record<string, any>) => void;
   onDelete: () => void;
   onDuplicate?: () => void;
@@ -81,7 +85,9 @@ const DragItem: React.FC<{
   block,
   index,
   isSelected,
+  selectedElement,
   onSelect,
+  onElementSelect,
   onUpdate,
   onDelete,
   onDuplicate,
@@ -138,7 +144,9 @@ const DragItem: React.FC<{
   const blockProps = {
     block,
     isSelected,
+    selectedElement,
     onSelect,
+    onElementSelect,
     onUpdate,
     onLinkSelect,
   };
@@ -318,7 +326,9 @@ export const DraggableLandingPagePreview: React.FC<
 > = ({
   page,
   selectedBlockId,
+  selectedElement,
   onSelectBlock,
+  onElementSelect,
   onUpdateBlock,
   onDeleteBlock,
   onMoveBlock,
@@ -358,7 +368,12 @@ export const DraggableLandingPagePreview: React.FC<
         block={block}
         index={index}
         isSelected={isSelected}
-        onSelect={() => onSelectBlock(block.id)}
+        selectedElement={isSelected ? selectedElement : null}
+        onSelect={() => {
+          onSelectBlock(block.id);
+          onElementSelect?.(null);
+        }}
+        onElementSelect={onElementSelect}
         onUpdate={(props: Record<string, any>) =>
           onUpdateBlock(block.id, props)
         }

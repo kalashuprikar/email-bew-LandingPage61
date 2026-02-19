@@ -11,6 +11,8 @@ interface LandingPageSettingsPanelProps {
   onBlockUpdate: (blockId: string, properties: Record<string, any>) => void;
   onBlockDelete?: () => void;
   blockId?: string;
+  selectedElement?: "heading" | "subheading" | "button" | null;
+  onElementSelect?: (element: "heading" | "subheading" | "button" | null) => void;
   selectedLinkIndex?: number | null;
   selectedLinkType?: "navigation" | "quick" | null;
   onLinkSelect?: (index: number | null, type: "navigation" | "quick" | null) => void;
@@ -23,6 +25,8 @@ export const LandingPageSettingsPanel: React.FC<
   onBlockUpdate,
   onBlockDelete,
   blockId,
+  selectedElement,
+  onElementSelect,
   selectedLinkIndex,
   selectedLinkType,
   onLinkSelect
@@ -42,6 +46,114 @@ export const LandingPageSettingsPanel: React.FC<
       onBlockUpdate(blockId, updated);
     }
   };
+
+  // Show element-specific styling UI if an element is selected
+  if (selectedElement && block && block.type === "hero") {
+    const elementLabels = {
+      heading: "Headline",
+      subheading: "Subheading",
+      button: "CTA Button",
+    };
+
+    return (
+      <div className="bg-white border-l border-gray-200 h-full overflow-y-auto flex flex-col">
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
+          <button
+            onClick={() => onElementSelect?.(null)}
+            className="text-sm text-gray-600 hover:text-gray-900 mb-2"
+          >
+            ← Back to block
+          </button>
+          <h3 className="font-semibold text-gray-900">Edit {elementLabels[selectedElement]}</h3>
+        </div>
+
+        <div className="flex-1 p-4">
+          <div className="space-y-4">
+            {selectedElement === "heading" && (
+              <>
+                <div>
+                  <Label className="text-sm font-medium">Headline Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="color"
+                      value={localProps.headlineColor || "#1f2937"}
+                      onChange={(e) => updateProperty("headlineColor", e.target.value)}
+                      className="w-12 h-10 p-1 cursor-pointer"
+                    />
+                    <Input
+                      value={localProps.headlineColor || "#1f2937"}
+                      onChange={(e) => updateProperty("headlineColor", e.target.value)}
+                      placeholder="#1f2937"
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+            {selectedElement === "subheading" && (
+              <>
+                <div>
+                  <Label className="text-sm font-medium">Subheading Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="color"
+                      value={localProps.subheadingColor || "#4b5563"}
+                      onChange={(e) => updateProperty("subheadingColor", e.target.value)}
+                      className="w-12 h-10 p-1 cursor-pointer"
+                    />
+                    <Input
+                      value={localProps.subheadingColor || "#4b5563"}
+                      onChange={(e) => updateProperty("subheadingColor", e.target.value)}
+                      placeholder="#4b5563"
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+            {selectedElement === "button" && (
+              <>
+                <div>
+                  <Label className="text-sm font-medium">Button Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="color"
+                      value={localProps.ctaButtonColor || "#FF6A00"}
+                      onChange={(e) => updateProperty("ctaButtonColor", e.target.value)}
+                      className="w-12 h-10 p-1 cursor-pointer"
+                    />
+                    <Input
+                      value={localProps.ctaButtonColor || "#FF6A00"}
+                      onChange={(e) => updateProperty("ctaButtonColor", e.target.value)}
+                      placeholder="#FF6A00"
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Button Text Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="color"
+                      value={localProps.ctaButtonTextColor || "#ffffff"}
+                      onChange={(e) => updateProperty("ctaButtonTextColor", e.target.value)}
+                      className="w-12 h-10 p-1 cursor-pointer"
+                    />
+                    <Input
+                      value={localProps.ctaButtonTextColor || "#ffffff"}
+                      onChange={(e) => updateProperty("ctaButtonTextColor", e.target.value)}
+                      placeholder="#ffffff"
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Show link editing UI if a link is selected
   if (selectedLinkIndex !== null && selectedLinkType && block) {

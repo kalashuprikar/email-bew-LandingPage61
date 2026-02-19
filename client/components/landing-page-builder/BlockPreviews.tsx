@@ -6,7 +6,9 @@ import { EditableLink } from "./EditableLink";
 interface BlockPreviewProps {
   block: LandingPageBlock;
   isSelected: boolean;
+  selectedElement?: "heading" | "subheading" | "button" | null;
   onSelect: () => void;
+  onElementSelect?: (element: "heading" | "subheading" | "button" | null) => void;
   onUpdate: (props: Record<string, any>) => void;
   onLinkSelect?: (linkIndex: number, linkType: "navigation" | "quick") => void;
 }
@@ -14,7 +16,9 @@ interface BlockPreviewProps {
 export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
   block,
   isSelected,
+  selectedElement,
   onSelect,
+  onElementSelect,
   onUpdate,
   onLinkSelect,
 }) => {
@@ -173,7 +177,9 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
 export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
   block,
   isSelected,
+  selectedElement,
   onSelect,
+  onElementSelect,
   onUpdate,
 }) => {
   const props = block.properties;
@@ -288,6 +294,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
           onClick={(e) => {
             e.stopPropagation();
             setSelectedElement("heading");
+            onElementSelect?.("heading");
           }}
         >
           {isEditingHeading ? (
@@ -405,6 +412,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
           onClick={(e) => {
             e.stopPropagation();
             setSelectedElement("subheading");
+            onElementSelect?.("subheading");
           }}
         >
           {isEditingSubheading ? (
@@ -522,6 +530,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
           onClick={(e) => {
             e.stopPropagation();
             setSelectedElement("button");
+            onElementSelect?.("button");
           }}
         >
           {isEditingButton ? (
