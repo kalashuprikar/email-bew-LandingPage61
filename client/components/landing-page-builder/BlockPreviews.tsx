@@ -2222,10 +2222,14 @@ export const ContentImageBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className="cursor-pointer transition-all"
-      style={{ backgroundColor: props.backgroundColor || "#ffffff" }}
+      className="cursor-pointer transition-all shadow-none"
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        border: "none",
+        boxShadow: "none"
+      }}
     >
-      <div className="p-6">
+      <div className="p-6 shadow-none" style={{ border: "none", boxShadow: "none" }}>
         <div className={`flex gap-6 items-center ${
           props.imagePosition === "right" ? "flex-row-reverse" : "flex-row"
         }`}>

@@ -489,7 +489,7 @@ export const DraggableLandingPagePreview: React.FC<
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-md overflow-hidden flex flex-col gap-4 p-4">
+    <div className="w-full bg-white rounded-lg overflow-hidden flex flex-col gap-4 p-4" style={{ boxShadow: "none" }}>
       {blocks.length === 0 && <EndDropZone />}
       {blocks.map((block, index) => renderBlock(block, index))}
       {blocks.length > 0 && <EndDropZone />}
