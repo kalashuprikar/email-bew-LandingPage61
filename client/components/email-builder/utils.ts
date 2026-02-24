@@ -1414,6 +1414,26 @@ export function renderBlockToHTML(block: ContentBlock): string {
 }
 
 export function renderTemplateToHTML(template: EmailTemplate): string {
+  // Check for data URLs in images and warn user
+  const hasDataURLImages = template.blocks.some((block: any) => {
+    if (block.type === "image" && block.src?.startsWith("data:")) {
+      return true;
+    }
+    // Check nested blocks
+    if (block.blocks) {
+      return block.blocks.some((b: any) => b.image?.startsWith("data:"));
+    }
+    if (block.image?.startsWith("data:")) return true;
+    return false;
+  });
+
+  if (hasDataURLImages) {
+    console.warn(
+      "⚠️ WARNING: This template contains images stored as Data URLs. These will NOT display in email clients. " +
+      "Please replace image URLs with absolute URLs (https://...) hosted on a server or CDN.",
+    );
+  }
+
   // Group inline blocks together for proper rendering
   const groupedBlocks: (any)[] = [];
   let inlineGroup: any[] = [];
