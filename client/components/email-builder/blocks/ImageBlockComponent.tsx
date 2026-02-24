@@ -42,6 +42,12 @@ export const ImageBlockComponent: React.FC<ImageBlockComponentProps> = ({
       reader.onload = (event) => {
         const result = event.target?.result as string;
         if (result) {
+          // Show warning about email compatibility
+          console.warn(
+            "⚠️ IMPORTANT: This image is stored as a Data URL and will NOT work when sending the email to external email clients (Gmail, Outlook, etc.). " +
+            "For email sending, please use absolute image URLs (https://...) hosted on your server or CDN. " +
+            "Data URLs work in the preview but email clients block them for security reasons.",
+          );
           onSrcChange(result);
         }
       };

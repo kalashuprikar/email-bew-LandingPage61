@@ -892,7 +892,13 @@ export function renderBlockToHTML(block: ContentBlock): string {
       const title = buttonBlock.linkTooltip
         ? `title="${buttonBlock.linkTooltip}"`
         : "";
-      return `<div style="display: flex; justify-content: ${buttonAlignment}; margin: ${buttonBlock.margin}px;"><a href="${buttonBlock.link}" ${target} ${title} style="background-color: ${buttonBlock.backgroundColor}; color: ${buttonBlock.textColor}; padding: ${buttonBlock.padding}px 20px; border-radius: ${buttonBlock.borderRadius}px; text-decoration: none; display: inline-block; text-align: center; font-size: ${buttonBlock.fontSize}px; font-weight: ${buttonBlock.fontWeight}; width: ${buttonWidth}; ${buttonBorder}">${buttonBlock.text}</a></div>`;
+      const alignmentStyle =
+        buttonBlock.alignment === "left"
+          ? "text-align: left;"
+          : buttonBlock.alignment === "right"
+            ? "text-align: right;"
+            : "text-align: center;";
+      return `<div style="${alignmentStyle} margin: ${buttonBlock.margin}px;"><a href="${buttonBlock.link}" ${target} ${title} style="background-color: ${buttonBlock.backgroundColor}; color: ${buttonBlock.textColor}; padding: ${buttonBlock.padding}px 20px; border-radius: ${buttonBlock.borderRadius}px; text-decoration: none; display: inline-block; font-size: ${buttonBlock.fontSize}px; font-weight: ${buttonBlock.fontWeight}; ${buttonBorder}">${buttonBlock.text}</a></div>`;
     }
     case "dynamicContent":
       return `<div style="background-color: ${block.backgroundColor}; padding: ${block.padding}px; border: 1px dashed #ccc;">${block.placeholder}</div>`;
@@ -1366,7 +1372,7 @@ export function renderBlockToHTML(block: ContentBlock): string {
           : "";
       return `<div style="background-color: ${cardBlock.backgroundColor}; border-radius: ${cardBlock.borderRadius}px; ${borderStyle} padding: ${cardBlock.padding}px; margin: ${cardBlock.margin}px; max-width: 600px; margin-left: auto; margin-right: auto;">
         <img src="${cardBlock.image}" alt="${cardBlock.imageAlt}" style="width: 100%; height: 300px; object-fit: cover; display: block; border-radius: ${cardBlock.borderRadius}px ${cardBlock.borderRadius}px 0 0;" />
-        <div style="text-align: center; padding: 20px;">
+        <div style="text-align: center; padding: 0; margin-top: 16px;">
           <h2 style="margin: 0 0 12px 0; font-size: 24px; font-weight: bold; color: #000;">${cardBlock.title}</h2>
           <p style="margin: 0 0 16px 0; font-size: 14px; color: #666; line-height: 1.5;">${cardBlock.description}</p>
           <a href="${cardBlock.buttonLink}" style="display: inline-block; background-color: #FF6A00; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 14px;">${cardBlock.buttonText}</a>
@@ -1414,6 +1420,26 @@ export function renderBlockToHTML(block: ContentBlock): string {
 }
 
 export function renderTemplateToHTML(template: EmailTemplate): string {
+  // Check for data URLs in images and warn user
+  const hasDataURLImages = template.blocks.some((block: any) => {
+    if (block.type === "image" && block.src?.startsWith("data:")) {
+      return true;
+    }
+    // Check nested blocks
+    if (block.blocks) {
+      return block.blocks.some((b: any) => b.image?.startsWith("data:"));
+    }
+    if (block.image?.startsWith("data:")) return true;
+    return false;
+  });
+
+  if (hasDataURLImages) {
+    console.warn(
+      "⚠️ WARNING: This template contains images stored as Data URLs. These will NOT display in email clients. " +
+      "Please replace image URLs with absolute URLs (https://...) hosted on a server or CDN.",
+    );
+  }
+
   // Group inline blocks together for proper rendering
   const groupedBlocks: (any)[] = [];
   let inlineGroup: any[] = [];
@@ -1439,13 +1465,15 @@ export function renderTemplateToHTML(template: EmailTemplate): string {
   const bodyContent = groupedBlocks
     .map((item) => {
       if (item._isInlineGroup) {
+        // For email clients, render inline blocks stacked vertically
+        // (email clients have limited support for side-by-side layouts)
         const inlineHtml = item.blocks
           .map((block: any) => {
             const blockHtml = renderBlockToHTML(block);
-            return `<div style="flex: 0 0 auto;">${blockHtml}</div>`;
+            return `<div style="width: 100%; margin-bottom: 16px;">${blockHtml}</div>`;
           })
           .join("");
-        return `<div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; width: 100%; margin: 0 auto; flex-wrap: wrap;">${inlineHtml}</div>`;
+        return `<div style="width: 100%; margin: 0 auto;">${inlineHtml}</div>`;
       }
       return renderBlockToHTML(item);
     })
@@ -1466,8 +1494,8 @@ export function renderTemplateToHTML(template: EmailTemplate): string {
     }
   </style>
 </head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: ${docBgColor};">
-  <div style="max-width: 600px; margin: 0 auto; background-color: ${template.backgroundColor}; border: 1px solid #ddd; border-radius: 4px; padding: ${template.padding}px; box-sizing: border-box; overflow: hidden;">
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: ${docBgColor};">
+  <div style="max-width: 600px; margin: 0 auto; background-color: ${template.backgroundColor}; border-radius: 4px; padding: ${template.padding}px; box-sizing: border-box; overflow: hidden;">
     ${bodyContent}
   </div>
 </body>
