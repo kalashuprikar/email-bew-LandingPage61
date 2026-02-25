@@ -203,6 +203,29 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
     }
   };
 
+  const handleSaveAndExit = async () => {
+    if (!page) return;
+
+    setIsSaving(true);
+    try {
+      const updatedPage = {
+        ...page,
+        name: pageName,
+        updatedAt: new Date().toISOString(),
+      };
+      saveLandingPageToLocalStorage(updatedPage);
+      setPage(updatedPage);
+      // Redirect back to templates list after save
+      setTimeout(() => {
+        setIsSaving(false);
+        onBack();
+      }, 500);
+    } catch (error) {
+      console.error("Error saving landing page:", error);
+      setIsSaving(false);
+    }
+  };
+
   if (!page) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -287,10 +310,19 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
             <Button
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-valasys-orange hover:bg-orange-600"
+              variant="outline"
+              size="sm"
             >
               <Save className="w-4 h-4 mr-2" />
               {isSaving ? "Saving..." : "Save"}
+            </Button>
+            <Button
+              onClick={handleSaveAndExit}
+              disabled={isSaving}
+              className="bg-valasys-orange hover:bg-orange-600"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {isSaving ? "Saving..." : "Save & exit"}
             </Button>
           </div>
         </div>
