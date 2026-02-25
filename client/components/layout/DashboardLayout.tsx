@@ -58,6 +58,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { DraggableChatSupport } from "@/components/ui/draggable-chat-support";
 import TrialProgressBar from "@/components/ui/trial-progress-bar";
 import TrialBanner from "@/components/ui/trial-banner";
 import TrialBadgeDropdown from "@/components/ui/trial-badge-dropdown";
@@ -168,6 +169,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     setSidebarOpen(false);
   }, []);
 
+  const [chatOpen, setChatOpen] = useState(false);
+
+  const [chatMinimized, setChatMinimized] = useState(true);
 
   // Tooltip state for disabled Manage Users item (rendered via portal outside sidebar)
   const [manageUsersTooltipVisible, setManageUsersTooltipVisible] =
@@ -179,6 +183,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Contact Sales dialog
   const [showContactSalesDialog, setShowContactSalesDialog] = useState(false);
+
+  const handleChatToggle = () => {
+    if (chatMinimized) {
+      setChatMinimized(false);
+      setChatOpen(true);
+    } else {
+      setChatMinimized(true);
+      setChatOpen(false);
+    }
+  };
+
+  const handleChatClose = () => {
+    setChatOpen(false);
+    setChatMinimized(true);
+  };
 
   // Favorites and submenu state
   const [expandedSubmenu, setExpandedSubmenu] = useState<string | null>(null);
@@ -1281,6 +1300,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </DialogContent>
       </Dialog>
 
+      {/* Draggable Chat Support Widget */}
+      <div data-tour="chat">
+        <DraggableChatSupport
+          isOpen={chatOpen}
+          onClose={handleChatClose}
+          isMinimized={chatMinimized}
+          onMinimize={handleChatToggle}
+          enableDrag={true}
+        />
+      </div>
 
       {/* Platform Tour */}
       <PlatformTour
