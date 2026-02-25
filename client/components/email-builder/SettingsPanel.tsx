@@ -7026,7 +7026,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         {renderSettings()}
 
         {/* Old-Style Spacing Section */}
-        {block && ("padding" in block || "margin" in block) && (
+        {block && (
           <div>
             <div className="flex items-center justify-between mb-3">
               <h4 className="text-xs font-bold text-gray-900">Spacing</h4>
