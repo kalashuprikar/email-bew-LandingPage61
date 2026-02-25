@@ -1524,29 +1524,13 @@ export function saveTemplateToLocalStorage(template: EmailTemplate): void {
 }
 
 export function getTemplatesFromLocalStorage(): EmailTemplate[] {
-  try {
-    const templates = localStorage.getItem("email_templates");
-    if (!templates) return [];
-
-    const parsed = JSON.parse(templates);
-    if (!Array.isArray(parsed)) return [];
-
-    // Backwards compatibility and data integrity
-    return parsed.map((template: any) => ({
-      id: template.id || Math.random().toString(36).substr(2, 9),
-      name: template.name || "Untitled Template",
-      subject: template.subject || "No Subject",
-      blocks: Array.isArray(template.blocks) ? template.blocks : [],
-      createdAt: template.createdAt || new Date().toISOString(),
-      updatedAt: template.updatedAt || new Date().toISOString(),
-      backgroundColor: template.backgroundColor || "#ffffff",
-      documentBackgroundColor: template.documentBackgroundColor || "#ffffff",
-      padding: typeof template.padding === "number" ? template.padding : 20,
-    }));
-  } catch (error) {
-    console.error("❌ Error loading templates from localStorage:", error);
-    return [];
-  }
+  const templates = localStorage.getItem("email_templates");
+  const parsed = templates ? JSON.parse(templates) : [];
+  // Backwards compatibility: add documentBackgroundColor if missing
+  return parsed.map((template: any) => ({
+    ...template,
+    documentBackgroundColor: template.documentBackgroundColor || "#ffffff",
+  }));
 }
 
 export function deleteTemplateFromLocalStorage(id: string): void {

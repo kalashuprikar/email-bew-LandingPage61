@@ -86,23 +86,16 @@ export default function Templates() {
 
   const filteredTemplates = templates.filter(
     (template) =>
-      (template.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (template.subject || "").toLowerCase().includes(searchQuery.toLowerCase()),
+      template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      template.subject.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const formatDate = (dateString: string | undefined | null) => {
-    if (!dateString) return "N/A";
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return "Invalid Date";
-      return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-    } catch (e) {
-      return "Invalid Date";
-    }
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   if (view === "editor") {
