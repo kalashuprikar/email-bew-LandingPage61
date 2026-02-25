@@ -483,24 +483,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
                 return (
                   <li key={item.name}>
-                    <div
-                      className={cn(
-                        "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group",
-                        !isExpanded && "justify-center",
-                        isActive
-                          ? "bg-valasys-orange text-white shadow-sm"
-                          : "text-valasys-gray-600 hover:text-valasys-gray-900 hover:bg-valasys-gray-100",
-                      )}
-                      title={!isExpanded ? item.name : undefined}
-                    >
-                      {isExpanded ? (
-                        <IconComponent
-                          className={cn(
-                            "w-4 h-4 flex-shrink-0 mr-3",
-                            isActive ? "text-white" : "text-valasys-gray-500",
-                          )}
-                        />
-                      ) : (
+                    {!isExpanded ? (
+                      <Link
+                        to={item.href}
+                        data-tour={item.tourId}
+                        onClick={(e) => handleNavigationClick(item, e)}
+                        className={cn(
+                          "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group",
+                          "justify-center",
+                          isActive
+                            ? "bg-valasys-orange text-white shadow-sm"
+                            : "text-valasys-gray-600 hover:text-valasys-gray-900 hover:bg-valasys-gray-100",
+                        )}
+                        title={item.name}
+                      >
                         <div
                           className={cn(
                             "w-10 h-10 rounded-md flex items-center justify-center",
@@ -511,45 +507,57 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         >
                           <IconComponent className="w-4 h-4" />
                         </div>
-                      )}
-                      {isExpanded && (
-                        <>
-                          <Link
-                            to={item.href}
-                            data-tour={item.tourId}
-                            onClick={(e) => handleNavigationClick(item, e)}
-                            className="truncate flex-1"
-                          >
-                            {item.name}
-                          </Link>
-                          {hasSubmenu && (
-                            <button
-                              onClick={() =>
-                                setExpandedSubmenu(
-                                  isSubmenuOpen ? null : item.name,
-                                )
-                              }
-                              className="ml-auto p-1 hover:bg-white/10 rounded transition-colors"
-                              aria-label={
-                                isSubmenuOpen
-                                  ? "Collapse submenu"
-                                  : "Expand submenu"
-                              }
-                            >
-                              <ChevronDown
-                                className={cn(
-                                  "w-4 h-4 transition-transform",
-                                  isSubmenuOpen && "rotate-180",
-                                  isActive
-                                    ? "text-white"
-                                    : "text-valasys-gray-500",
-                                )}
-                              />
-                            </button>
+                      </Link>
+                    ) : (
+                      <div
+                        className={cn(
+                          "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group",
+                          isActive
+                            ? "bg-valasys-orange text-white shadow-sm"
+                            : "text-valasys-gray-600 hover:text-valasys-gray-900 hover:bg-valasys-gray-100",
+                        )}
+                      >
+                        <IconComponent
+                          className={cn(
+                            "w-4 h-4 flex-shrink-0 mr-3",
+                            isActive ? "text-white" : "text-valasys-gray-500",
                           )}
-                        </>
-                      )}
-                    </div>
+                        />
+                        <Link
+                          to={item.href}
+                          data-tour={item.tourId}
+                          onClick={(e) => handleNavigationClick(item, e)}
+                          className="truncate flex-1"
+                        >
+                          {item.name}
+                        </Link>
+                        {hasSubmenu && (
+                          <button
+                            onClick={() =>
+                              setExpandedSubmenu(
+                                isSubmenuOpen ? null : item.name,
+                              )
+                            }
+                            className="ml-auto p-1 hover:bg-white/10 rounded transition-colors"
+                            aria-label={
+                              isSubmenuOpen
+                                ? "Collapse submenu"
+                                : "Expand submenu"
+                            }
+                          >
+                            <ChevronDown
+                              className={cn(
+                                "w-4 h-4 transition-transform",
+                                isSubmenuOpen && "rotate-180",
+                                isActive
+                                  ? "text-white"
+                                  : "text-valasys-gray-500",
+                              )}
+                            />
+                          </button>
+                        )}
+                      </div>
+                    )}
 
                     {hasSubmenu && isExpanded && isSubmenuOpen && (
                       <ul className="ml-4 mt-1 space-y-1 border-l border-valasys-gray-200 pl-0">
@@ -660,6 +668,31 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           )}
                         </div>
                       </div>
+                    ) : !isExpanded ? (
+                      <Link
+                        to={item.href}
+                        data-tour={item.tourId}
+                        onClick={(e) => handleNavigationClick(item, e)}
+                        className={cn(
+                          "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group",
+                          "justify-center",
+                          isActive
+                            ? "bg-valasys-orange text-white shadow-sm"
+                            : "text-valasys-gray-600 hover:text-valasys-gray-900 hover:bg-valasys-gray-100",
+                        )}
+                        title={item.name}
+                      >
+                        <div
+                          className={cn(
+                            "w-10 h-10 rounded-md flex items-center justify-center",
+                            isActive
+                              ? "bg-valasys-orange text-white shadow-sm"
+                              : "bg-valasys-gray-100 text-valasys-gray-600 group-hover:bg-valasys-gray-200",
+                          )}
+                        >
+                          <IconComponent className="w-4 h-4" />
+                        </div>
+                      </Link>
                     ) : (
                       <Link
                         to={item.href}
@@ -667,35 +700,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         onClick={(e) => handleNavigationClick(item, e)}
                         className={cn(
                           "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group",
-                          !isExpanded && "justify-center",
                           isActive
                             ? "bg-valasys-orange text-white shadow-sm"
                             : "text-valasys-gray-600 hover:text-valasys-gray-900 hover:bg-valasys-gray-100",
                         )}
-                        title={!isExpanded ? item.name : undefined}
+                        title={item.name}
                       >
-                        {isExpanded ? (
-                          <IconComponent
-                            className={cn(
-                              "w-4 h-4 flex-shrink-0 mr-3",
-                              isActive ? "text-white" : "text-valasys-gray-500",
-                            )}
-                          />
-                        ) : (
-                          <div
-                            className={cn(
-                              "w-10 h-10 rounded-md flex items-center justify-center",
-                              isActive
-                                ? "bg-valasys-orange text-white shadow-sm"
-                                : "bg-valasys-gray-100 text-valasys-gray-600 group-hover:bg-valasys-gray-200",
-                            )}
-                          >
-                            <IconComponent className="w-4 h-4" />
-                          </div>
-                        )}
-                        {isExpanded && (
-                          <span className="truncate">{item.name}</span>
-                        )}
+                        <IconComponent
+                          className={cn(
+                            "w-4 h-4 flex-shrink-0 mr-3",
+                            isActive ? "text-white" : "text-valasys-gray-500",
+                          )}
+                        />
+                        <span className="truncate">{item.name}</span>
                       </Link>
                     )}
                   </li>
