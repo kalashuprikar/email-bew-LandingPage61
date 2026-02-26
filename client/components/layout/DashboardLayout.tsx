@@ -171,6 +171,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const [chatOpen, setChatOpen] = useState(false);
 
+  const [chatMinimized, setChatMinimized] = useState(true);
+
   // Tooltip state for disabled Manage Users item (rendered via portal outside sidebar)
   const [manageUsersTooltipVisible, setManageUsersTooltipVisible] =
     useState(false);
@@ -181,6 +183,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Contact Sales dialog
   const [showContactSalesDialog, setShowContactSalesDialog] = useState(false);
+
+  const handleChatToggle = () => {
+    if (chatMinimized) {
+      setChatMinimized(false);
+      setChatOpen(true);
+    } else {
+      setChatMinimized(true);
+      setChatOpen(false);
+    }
+  };
+
+  const handleChatClose = () => {
+    setChatOpen(false);
+    setChatMinimized(true);
+  };
 
   // Favorites and submenu state
   const [expandedSubmenu, setExpandedSubmenu] = useState<string | null>(null);
@@ -308,7 +325,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     console.log("Marking all notifications as read");
   };
 
-  const [chatMinimized, setChatMinimized] = useState(true);
   const [profileInfo, setProfileInfo] = useState<{
     avatarUrl?: string | null;
     fullName?: string;
@@ -348,20 +364,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return currentItem?.name || "Dashboard";
   };
 
-  const handleChatToggle = () => {
-    if (chatMinimized) {
-      setChatMinimized(false);
-      setChatOpen(true);
-    } else {
-      setChatMinimized(true);
-      setChatOpen(false);
-    }
-  };
-
-  const handleChatClose = () => {
-    setChatOpen(false);
-    setChatMinimized(true);
-  };
 
   const handleRestoreMastery = () => {
     try {
@@ -1298,6 +1300,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </DialogContent>
       </Dialog>
 
+      {/* Platform Tour */}
+      <PlatformTour
+        isOpen={isTourOpen}
+        onClose={closeTour}
+        onComplete={completeTour}
+      />
+
+      {/* Mastery Bottom Bar */}
+      <MasteryBottomBar />
+
       {/* Draggable Chat Support Widget */}
       <div data-tour="chat">
         <DraggableChatSupport
@@ -1308,16 +1320,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           enableDrag={true}
         />
       </div>
-
-      {/* Platform Tour */}
-      <PlatformTour
-        isOpen={isTourOpen}
-        onClose={closeTour}
-        onComplete={completeTour}
-      />
-
-      {/* Mastery Bottom Bar */}
-      <MasteryBottomBar />
     </div>
   );
 }
