@@ -97,8 +97,15 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   }));
 
   return (
-    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-6 bg-gray-50">
-      <div className="max-w-2xl mx-auto">
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-gray-50 overflow-x-hidden flex flex-col items-center">
+      <div
+        className="origin-top transition-all duration-300 py-6"
+        style={{
+          transform: "scale(0.8)",
+          width: "125%",
+          maxWidth: "840px",
+        }}
+      >
         {/* Template Settings */}
         <div className="bg-white border border-gray-200 rounded-t-lg p-4 overflow-x-hidden">
           <div className="grid grid-cols-2 gap-3">
